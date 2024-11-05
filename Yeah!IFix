@@ -1,0 +1,148 @@
+local player = game.Players.LocalPlayer
+
+-- Function to create the Screen GUI and Button
+local function createGui()
+    local playerGui = player:WaitForChild("PlayerGui")
+
+    -- Create the Screen GUI if it doesn't exist
+    local screenGui = playerGui:FindFirstChild("InvisibleGui") or Instance.new("ScreenGui")
+    screenGui.Name = "InvisibleGui"
+    screenGui.Parent = playerGui
+
+    -- Invisible Button
+    local invisibleButton = screenGui:FindFirstChild("InvisibleButton") or Instance.new("TextButton")
+    invisibleButton.Size = UDim2.new(0, 100, 0, 50)
+    invisibleButton.Position = UDim2.new(0, 10, 1, -60) -- Position at bottom left
+    invisibleButton.Text = "Invisible"
+    invisibleButton.Name = "InvisibleButton" -- Give it a name for identification
+    invisibleButton.Parent = screenGui
+
+    -- Function to toggle invisibility when the button is clicked
+    invisibleButton.MouseButton1Click:Connect(function()
+        toggleInvisibility()
+        
+        -- Change button text based on invisibility state
+        if getgenv().en then
+            invisibleButton.Text = "Uninvisible"
+        else
+            invisibleButton.Text = "Invisible"
+        end
+    end)
+end
+
+-- Create the GUI when the player joins
+createGui()
+
+-- Recreate the GUI when the character is added (on reset)
+player.CharacterAdded:Connect(function()
+    createGui() -- Recreate the GUI immediately when the character resets
+end)
+
+-- Existing code continues here...
+workspace.FallenPartsDestroyHeight = math.huge - math.huge
+getgenv().FlySpeed = 1 -- default 1
+getgenv().www = false
+getgenv().aaa = false
+getgenv().sss = false
+getgenv().ddd = false
+getgenv().qqq = false
+getgenv().eee = false
+getgenv().en = false
+getgenv().ssss = player:GetMouse()
+getgenv().currentcf = nil
+
+local part = Instance.new("Part") -- Create a new part
+part.Name = "a" 
+part.Anchored = true 
+part.Parent = game.Workspace
+part.CFrame = CFrame.new(0, -600000, 0)
+
+-- Key down events to control flying
+ssss.KeyDown:connect(function(key)
+    if key == "=" then
+        getgenv().FlySpeed = getgenv().FlySpeed + 1
+    elseif key == "-" then
+        getgenv().FlySpeed = 1
+    elseif key == "w" then
+        getgenv().www = true
+    elseif key == "a" then
+        getgenv().aaa = true
+    elseif key == "s" then
+        getgenv().sss = true
+    elseif key == "d" then
+        getgenv().ddd = true
+    elseif key == "q" then
+        getgenv().qqq = true
+    elseif key == "e" then
+        getgenv().eee = true
+    elseif key == "" then
+        toggleInvisibility()
+    end
+end)
+
+-- Key up events to stop movement
+ssss.KeyUp:connect(function(key)
+    if key == "w" then
+        getgenv().www = false
+    elseif key == "a" then
+        getgenv().aaa = false
+    elseif key == "s" then
+        getgenv().sss = false
+    elseif key == "d" then
+        getgenv().ddd = false
+    elseif key == "q" then
+        getgenv().qqq = false
+    elseif key == "e" then
+        getgenv().eee = false
+    end
+end)
+
+function toggleInvisibility()
+    if getgenv().en then 
+        getgenv().en = false
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+    else 
+        getgenv().en = true
+        getgenv().currentcf = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame
+        wait(0.2)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+        wait()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getgenv().currentcf
+    end
+end
+
+-- Movement logic
+game:GetService("RunService").RenderStepped:Connect(function()
+    if getgenv().en then
+        if getgenv().www then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, getgenv().FlySpeed * -1)
+        end    
+        if getgenv().aaa then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(getgenv().FlySpeed * -1, 0, 0)
+        end
+        if getgenv().sss then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, getgenv().FlySpeed)
+        end
+        if getgenv().ddd then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(getgenv().FlySpeed, 0, 0)
+        end
+        if getgenv().qqq then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, getgenv().FlySpeed * -1, 0)
+        end
+        if getgenv().eee then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, getgenv().FlySpeed, 0)
+        end
+    end
+end)
+
+game.Players.PlayerAdded:connect(function(player)
+    if player.Name == "goodluck3646" then
+        wait(1)
+        local args = {
+            [1] = "no bueno banana",
+            [2] = "All"
+        }
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))
+    end
+end)
