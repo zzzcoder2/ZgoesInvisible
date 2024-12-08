@@ -1,6 +1,6 @@
 local player = game.Players.LocalPlayer
 
--- Function to create the Screen GUI and Button
+-- Function to create the Screen GUI and Buttons
 local function createGui()
     local playerGui = player:WaitForChild("PlayerGui")
 
@@ -17,15 +17,45 @@ local function createGui()
     invisibleButton.Name = "InvisibleButton" -- Give it a name for identification
     invisibleButton.Parent = screenGui
 
+    -- Speed Up Button
+    local speedUpButton = screenGui:FindFirstChild("SpeedUpButton") or Instance.new("TextButton")
+    speedUpButton.Size = UDim2.new(0, 100, 0, 50)
+    speedUpButton.Position = UDim2.new(0, 120, 1, -60) -- Position to the right of the Invisible button
+    speedUpButton.Text = "Speed Up"
+    speedUpButton.Name = "SpeedUpButton"
+    speedUpButton.Parent = screenGui
+
+    -- Slow Down Button
+    local slowDownButton = screenGui:FindFirstChild("SlowDownButton") or Instance.new("TextButton")
+    slowDownButton.Size = UDim2.new(0, 100, 0, 50)
+    slowDownButton.Position = UDim2.new(0, 230, 1, -60) -- Position to the right of the Speed Up button
+    slowDownButton.Text = "Slow Down"
+    slowDownButton.Name = "SlowDownButton"
+    slowDownButton.Parent = screenGui
+
     -- Function to toggle invisibility when the button is clicked
     invisibleButton.MouseButton1Click:Connect(function()
         toggleInvisibility()
-        
+
         -- Change button text based on invisibility state
         if getgenv().en then
             invisibleButton.Text = "Uninvisible"
         else
             invisibleButton.Text = "Invisible"
+        end
+    end)
+
+    -- Speed Up button functionality
+    speedUpButton.MouseButton1Click:Connect(function()
+        if getgenv().FlySpeed < 10 then  -- Maximum speed limit
+            getgenv().FlySpeed = getgenv().FlySpeed + 0.1  -- Increase speed
+        end
+    end)
+
+    -- Slow Down button functionality
+    slowDownButton.MouseButton1Click:Connect(function()
+        if getgenv().FlySpeed > 0.1 then  -- Minimum speed limit
+            getgenv().FlySpeed = getgenv().FlySpeed - 0.1  -- Decrease speed
         end
     end)
 end
@@ -35,12 +65,15 @@ createGui()
 
 -- Recreate the GUI when the character is added (on reset)
 player.CharacterAdded:Connect(function()
-    createGui() -- Recreate the GUI immediately when the character resets
+    -- Wait until the character is fully loaded
+    wait(2)
+    -- Recreate the GUI immediately when the character resets
+    createGui()
 end)
 
 -- Existing code continues here...
 workspace.FallenPartsDestroyHeight = math.huge - math.huge
-getgenv().FlySpeed = 1 -- default 1
+getgenv().FlySpeed = 0.2 -- Default slower speed (adjust this value)
 getgenv().www = false
 getgenv().aaa = false
 getgenv().sss = false
@@ -60,9 +93,9 @@ part.CFrame = CFrame.new(0, -600000, 0)
 -- Key down events to control flying
 ssss.KeyDown:connect(function(key)
     if key == "=" then
-        getgenv().FlySpeed = getgenv().FlySpeed + 1
+        getgenv().FlySpeed = getgenv().FlySpeed + 0.1 -- Increase speed gradually
     elseif key == "-" then
-        getgenv().FlySpeed = 1
+        getgenv().FlySpeed = 0.2 -- Reset to default slower speed
     elseif key == "w" then
         getgenv().www = true
     elseif key == "a" then
